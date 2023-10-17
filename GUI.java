@@ -26,12 +26,8 @@ public class GUI extends Application {
 	
 		menuGames.getItems().addAll(menuItemPlayPoker, menuItemPlayKeno, menuItemExit);
 		
-		menuItemPlayPoker.setOnAction(e -> {
-			newPoker();
-		});
-		menuItemPlayKeno.setOnAction(e -> {
-			newKeno();
-		});
+		menuItemPlayPoker.setOnAction(e -> newPoker());
+		menuItemPlayKeno.setOnAction(e -> newKeno());
 		menuItemExit.setOnAction(e -> System.exit(0));
 
 		vBox.getChildren().addAll(menuBar);
