@@ -18,17 +18,17 @@ Another benefit of this software is that you can play it while in the comfort of
 
 ### Constraints:
 
-Players may encounter visual bugs, such as misaligned graphics, overlapping buttons, or display issues on various screen resolutions and sizes.
+* Players may encounter visual bugs, such as misaligned graphics, overlapping buttons, or display issues on various screen resolutions and sizes.
 
-I will test the program with different settings to make sure that the program will adapt correctly.
+* I will test the program with different settings to make sure that the program will adapt correctly.
 
-Different devices with underpowered components as well might prove to “break” some of the GUI or logic.
+* Different devices with underpowered components as well might prove to “break” some of the GUI or logic.
 
-I will test the program with different devices to make sure that the program will run correctly.
+* I will test the program with different devices to make sure that the program will run correctly.
 
-Network connectivity can also be problematic, the game might crash or not save the progress if the connection cuts out.
+* Network connectivity can also be problematic, the game might crash or not save the progress if the connection cuts out.
 
-I might add an offline mode or a failsafe to save the data the second the network cuts out.
+* I might add an offline mode or a failsafe to save the data the second the network cuts out.
 
 ### Conclusion:
 
