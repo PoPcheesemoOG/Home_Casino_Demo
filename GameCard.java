@@ -2,14 +2,12 @@
  * Date: 10/17/2023
  */
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.image.*;
+import java.io.*;
 
-public class GameCard {
-//	public Image img;
-	public String img;
-//	public ImageView view = new ImageView(img);
-	public String view = new String();
+public class GameCard  {
+	public Image img;
+	public ImageView view = new ImageView(img);
 	public enum Suit {Spade, Clubs, Heart, Diamond};
 	public int Number;
 	public String name;
@@ -33,7 +31,9 @@ public class GameCard {
 	public int getNumber() {
 		return Number;
 	}
-	public void setImage(String location) {
-		img = location;
+	public void setImage(String location) throws FileNotFoundException {
+		img = new Image(new FileInputStream(location));
+		view = new ImageView(img);
+		view.set
 	}
 }

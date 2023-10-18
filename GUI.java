@@ -10,9 +10,9 @@ import javafx.geometry.*;
 import javafx.stage.*;
 import javafx.application.*;
 import javafx.scene.*;
+import javafx.scene.image.*;
 
 public class GUI extends Application {
-
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -43,27 +43,29 @@ public class GUI extends Application {
 				switch (i) {
 				case 0: deck.get(j - 1).setName("Spade" + j);
 						deck.get(j - 1).setNumber(j);
-						deck.get(j - 1).setImage("Users/student/eclipse-workspace/VideoPoker/spade" + j + ".png");
+						deck.get(j - 1).setImage("Cards/spade" + j + ".png");
 						break;
 				case 1: deck.get(j + 12).setName("Club" + j);
 						deck.get(j + 12).setNumber(j);
-						deck.get(j + 12).setImage("/Cards/club" + j + ".png");
+						deck.get(j + 12).setImage("Cards/club" + j + ".png");
 						break;
 				case 2: deck.get(j + 25).setName("Heart" + j);
 						deck.get(j + 25).setNumber(j);
-						deck.get(j + 25).setImage("/Cards/heart" + j + ".png");
+						deck.get(j + 25).setImage("Cards/heart" + j + ".png");
 						break;
 				case 3: deck.get(j + 38).setName("Diamond" + j);
 						deck.get(j + 38).setNumber(j);
-						deck.get(j + 38).setImage("/Cards/diamond" + j + ".png");
+						deck.get(j + 38).setImage("Cards/diamond" + j + ".png");
 						break;
 				}
 			}
 		}
+		Group cards = new Group();
 		for (int i = 0; i < 52; i++) {
+			cards.getChildren().add(deck.get(i).view);
 			System.out.println(deck.get(i).getName());
 		}
-		vBox.getChildren().addAll(menuBar);
+		vBox.getChildren().addAll(menuBar, cards);
 		primaryStage.setTitle("Home Casino Main Menu");
 		primaryStage.setScene(menuScene);
 		primaryStage.show();
