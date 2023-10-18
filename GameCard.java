@@ -34,6 +34,7 @@ public class GameCard  {
 	public void setImage(String location) throws FileNotFoundException {
 		img = new Image(new FileInputStream(location));
 		view = new ImageView(img);
-		view.set
+		view.setFitHeight(100);
+		view.setFitWidth(67);
 	}
 }

@@ -17,7 +17,7 @@ public class GUI extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		VBox vBox = new VBox(10);
-		Scene menuScene = new Scene(vBox, 700, 600);
+		Scene menuScene = new Scene(vBox, 1000, 600);
 
 		MenuBar menuBar = new MenuBar();		
 		Menu menuGames = new Menu("Games");		
@@ -34,7 +34,7 @@ public class GUI extends Application {
 		menuItemExit.setOnAction(e -> System.exit(0));
 
 		List<GameCard> deck = new ArrayList<GameCard>();
-		
+
 		for (int i = 0; i < 52; i++) {
 			deck.add(new GameCard());
 		}
@@ -42,26 +42,41 @@ public class GUI extends Application {
 			for (int j = 1; j < 14; j++) {
 				switch (i) {
 				case 0: deck.get(j - 1).setName("Spade" + j);
-						deck.get(j - 1).setNumber(j);
-						deck.get(j - 1).setImage("Cards/spade" + j + ".png");
-						break;
+				deck.get(j - 1).setNumber(j);
+				deck.get(j - 1).setImage("Cards/spade" + j + ".png");
+				break;
 				case 1: deck.get(j + 12).setName("Club" + j);
-						deck.get(j + 12).setNumber(j);
-						deck.get(j + 12).setImage("Cards/club" + j + ".png");
-						break;
+				deck.get(j + 12).setNumber(j);
+				deck.get(j + 12).setImage("Cards/club" + j + ".png");
+				break;
 				case 2: deck.get(j + 25).setName("Heart" + j);
-						deck.get(j + 25).setNumber(j);
-						deck.get(j + 25).setImage("Cards/heart" + j + ".png");
-						break;
+				deck.get(j + 25).setNumber(j);
+				deck.get(j + 25).setImage("Cards/heart" + j + ".png");
+				break;
 				case 3: deck.get(j + 38).setName("Diamond" + j);
-						deck.get(j + 38).setNumber(j);
-						deck.get(j + 38).setImage("Cards/diamond" + j + ".png");
-						break;
+				deck.get(j + 38).setNumber(j);
+				deck.get(j + 38).setImage("Cards/diamond" + j + ".png");
+				break;
 				}
 			}
 		}
 		Group cards = new Group();
 		for (int i = 0; i < 52; i++) {
+			if (i < 13) {
+				deck.get(i).view.setX(i * 70);
+			}
+			else if (12 < i && i < 26) {
+				deck.get(i).view.setX((i - 13) * 70);
+				deck.get(i).view.setY(110);
+			}
+			else if (25 < i && i < 39) {
+				deck.get(i).view.setX((i - 26) * 70);
+				deck.get(i).view.setY(220);
+			}
+			else if (38 < i) {
+				deck.get(i).view.setX((i - 39) * 70);
+				deck.get(i).view.setY(330);
+			}
 			cards.getChildren().add(deck.get(i).view);
 			System.out.println(deck.get(i).getName());
 		}
