@@ -4,8 +4,9 @@
 
 import java.util.*;
 import javafx.scene.layout.*;
+import javafx.scene.paint.*;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
+import javafx.scene.input.*;
 import javafx.geometry.*;
 import javafx.stage.*;
 import javafx.application.*;
@@ -13,11 +14,22 @@ import javafx.scene.*;
 import javafx.scene.image.*;
 
 public class GUI extends Application {
+	static double cardX;
+	static double cardY;
 
 	@Override
+
 	public void start(Stage primaryStage) throws Exception {
-		VBox vBox = new VBox(10);
-		Scene menuScene = new Scene(vBox, 1000, 600);
+		VBox vBoxCards = new VBox(20);
+		vBoxCards.setBackground(new Background(new BackgroundFill(Color.CRIMSON,
+				CornerRadii.EMPTY, Insets.EMPTY)));
+		vBoxCards.setAlignment(Pos.TOP_CENTER);
+		Scene menuScene = new Scene(vBoxCards, 1200, 600);
+	//	double sceneW = menuScene.getWidth();
+		double vBoxW = vBoxCards.getWidth();
+		double vBoxH = vBoxCards.getHeight();
+		cardX = vBoxW / 13.5;
+		cardY = vBoxH / 4.5;
 
 		MenuBar menuBar = new MenuBar();		
 		Menu menuGames = new Menu("Games");		
@@ -63,24 +75,24 @@ public class GUI extends Application {
 		Group cards = new Group();
 		for (int i = 0; i < 52; i++) {
 			if (i < 13) {
-				deck.get(i).view.setX(i * 70);
+				deck.get(i).view.setX(20 + (i * cardX));
 			}
 			else if (12 < i && i < 26) {
-				deck.get(i).view.setX((i - 13) * 70);
-				deck.get(i).view.setY(110);
+				deck.get(i).view.setX(0 + ((i - 13) * cardX));
+				deck.get(i).view.setY(cardY);
 			}
 			else if (25 < i && i < 39) {
-				deck.get(i).view.setX((i - 26) * 70);
-				deck.get(i).view.setY(220);
+				deck.get(i).view.setX(20 + ((i - 26) * cardX));
+				deck.get(i).view.setY(cardY * 2);
 			}
 			else if (38 < i) {
-				deck.get(i).view.setX((i - 39) * 70);
-				deck.get(i).view.setY(330);
+				deck.get(i).view.setX(0 + ((i - 39) * cardX));
+				deck.get(i).view.setY(cardY * 3);
 			}
 			cards.getChildren().add(deck.get(i).view);
 			System.out.println(deck.get(i).getName());
 		}
-		vBox.getChildren().addAll(menuBar, cards);
+		vBoxCards.getChildren().addAll(menuBar, cards);
 		primaryStage.setTitle("Home Casino Main Menu");
 		primaryStage.setScene(menuScene);
 		primaryStage.show();
@@ -96,6 +108,8 @@ public class GUI extends Application {
 		menuExit1.getItems().add(menuItemExit1);
 
 		VBox vBox1 = new VBox(10);
+		vBox1.setBackground(new Background(new BackgroundFill(Color.DARKOLIVEGREEN,
+				CornerRadii.EMPTY, Insets.EMPTY)));
 		vBox1.getChildren().addAll(menuBarPoker);
 
 		Scene pokerScene = new Scene(vBox1, 600, 400);
@@ -114,6 +128,8 @@ public class GUI extends Application {
 		menuExit1.getItems().add(menuItemExit1);
 
 		VBox vBox1 = new VBox(10);
+		vBox1.setBackground(new Background(new BackgroundFill(Color.GOLD,
+				CornerRadii.EMPTY, Insets.EMPTY)));
 		vBox1.getChildren().addAll(menuBarKeno);
 
 		Scene kenoScene = new Scene(vBox1, 600, 400);
@@ -123,5 +139,14 @@ public class GUI extends Application {
 		kenoStage.show();
 
 		menuItemExit1.setOnAction(e1 -> kenoStage.close());
+	}
+
+	public double getCardX() {
+		System.out.println(cardX);
+		return cardX;
+	}
+	public double getCardY() {
+		System.out.println(cardY);
+		return cardY;
 	}
 }

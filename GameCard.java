@@ -11,6 +11,8 @@ public class GameCard  {
 	public enum Suit {Spade, Clubs, Heart, Diamond};
 	public int Number;
 	public String name;
+	double cardW = GUI.cardX;
+	double cardH = GUI.cardY;
 
 	public GameCard() {
 		
@@ -34,7 +36,7 @@ public class GameCard  {
 	public void setImage(String location) throws FileNotFoundException {
 		img = new Image(new FileInputStream(location));
 		view = new ImageView(img);
-		view.setFitHeight(100);
-		view.setFitWidth(67);
+		view.setFitHeight(cardH - 5);
+		view.setFitWidth(cardW - 5);
 	}
 }
