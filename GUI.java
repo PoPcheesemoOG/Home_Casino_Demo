@@ -3,33 +3,55 @@
  */
 
 import java.util.*;
+
+import javax.swing.text.View;
+
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
+import javafx.scene.text.*;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.geometry.*;
 import javafx.stage.*;
 import javafx.application.*;
 import javafx.scene.*;
-import javafx.scene.image.*;
 
 public class GUI extends Application {
 	static double cardX;
 	static double cardY;
+	static double sceneX;
+	static double sceneY;
 
 	@Override
 
 	public void start(Stage primaryStage) throws Exception {
 		VBox vBoxCards = new VBox(20);
-		vBoxCards.setBackground(new Background(new BackgroundFill(Color.CRIMSON,
+		vBoxCards.setBackground(new Background(new BackgroundFill(Color.BLUE,
 				CornerRadii.EMPTY, Insets.EMPTY)));
 		vBoxCards.setAlignment(Pos.TOP_CENTER);
-		Scene menuScene = new Scene(vBoxCards, 1200, 600);
-	//	double sceneW = menuScene.getWidth();
-		double vBoxW = vBoxCards.getWidth();
-		double vBoxH = vBoxCards.getHeight();
-		cardX = vBoxW / 13.5;
-		cardY = vBoxH / 4.5;
+		
+		
+
+		VBox vBoxGame = new VBox(10);
+		
+		Button btPlayKeno = new Button("PLAY");
+		btPlayKeno.setPrefSize(150, 50);
+		
+		btPlayKeno.setFont(new Font(40).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 30.0));
+		btPlayKeno.setBackground(new Background(new BackgroundFill(Color.LIMEGREEN,
+				CornerRadii.EMPTY, Insets.EMPTY)));
+		btPlayKeno.setMaxSize(225, 75);
+		btPlayKeno.setMinSize(100, 33);
+		btPlayKeno.setOnAction(e -> {
+			System.out.println("BINGO");
+			playKeno();
+		});
+		vBoxGame.setPadding(new Insets(25));
+		vBoxGame.setAlignment(Pos.CENTER);
+		vBoxGame.getChildren().add(btPlayKeno);
+	//	vBoxGame.setVgrow(btPlayKeno, Priority.ALWAYS);
+
+		HBox hBoxCards = new HBox(10);
 
 		MenuBar menuBar = new MenuBar();		
 		Menu menuGames = new Menu("Games");		
@@ -44,58 +66,135 @@ public class GUI extends Application {
 		menuItemPlayPoker.setOnAction(e -> newPoker());
 		menuItemPlayKeno.setOnAction(e -> newKeno());
 		menuItemExit.setOnAction(e -> System.exit(0));
-
+		
+		PaneOrganizer pane = new PaneOrganizer(vBoxCards);
+		pane.getTopPane().getChildren().add(menuBar);
+		pane.getRightPane().getChildren().add(vBoxGame);
+		
+		Scene menuScene = new Scene(pane.getAnchor(), 1000, 500);
+		
 		List<GameCard> deck = new ArrayList<GameCard>();
+		List<GameCard> playerChoice = new ArrayList<GameCard>();
+		
+		btPlayKeno.prefWidthProperty().bind(vBoxGame.widthProperty());
+		btPlayKeno.prefHeightProperty().bind(vBoxGame.heightProperty());
+		
+		double vBoxW = (pane.getAnchor().getWidth() - pane.getRightPane().getPrefWidth());
+		double vBoxH = (pane.getAnchor().getHeight() - pane.getTopPane().getPrefHeight());
+		cardX = vBoxW / 13.5;
+		cardY = vBoxH / 4.5;
 
 		for (int i = 0; i < 52; i++) {
 			deck.add(new GameCard());
 		}
+		
 		for (int i = 0; i < 4; i++) {
 			for (int j = 1; j < 14; j++) {
+				int cardNumber;
 				switch (i) {
-				case 0: deck.get(j - 1).setName("Spade" + j);
-				deck.get(j - 1).setNumber(j);
-				deck.get(j - 1).setImage("Cards/spade" + j + ".png");
+				case 0: 
+				cardNumber = j - 1; 
+				deck.get(cardNumber).setName("Spade" + j);
+				deck.get(cardNumber).setNumber(j);
+				deck.get(cardNumber).setImage("Cards/spade" + j + ".png");
+				deck.get(cardNumber).view.fitWidthProperty().bind(pane.getRoot().widthProperty().
+						subtract(pane.getRightPane().getWidth()).divide(20));
+				deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
+						subtract(pane.getRightPane().getHeight()).divide(4.5));
+			//	deck.get(cardNumber).view.
+				deck.get(cardNumber).view.setOnMousePressed(e -> {
+					playerChoice.add(deck.get(cardNumber));
+					System.out.println(cardNumber);
+				});
 				break;
-				case 1: deck.get(j + 12).setName("Club" + j);
-				deck.get(j + 12).setNumber(j);
-				deck.get(j + 12).setImage("Cards/club" + j + ".png");
+				case 1: 
+				cardNumber = j + 12;
+				deck.get(cardNumber).setName("Club" + j);
+				deck.get(cardNumber).setNumber(j);
+				deck.get(cardNumber).setImage("Cards/club" + j + ".png");
+				deck.get(cardNumber).view.fitWidthProperty().bind(pane.getRoot().widthProperty().
+						subtract(pane.getRightPane().getWidth()).divide(20));
+				deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
+						subtract(pane.getRightPane().getHeight()).divide(4.5));
+				deck.get(cardNumber).view.setOnMousePressed(e -> {
+					playerChoice.add(deck.get(cardNumber));
+					System.out.println(cardNumber);
+				});
 				break;
-				case 2: deck.get(j + 25).setName("Heart" + j);
-				deck.get(j + 25).setNumber(j);
-				deck.get(j + 25).setImage("Cards/heart" + j + ".png");
+				case 2: 
+				cardNumber = j + 25;
+				deck.get(cardNumber).setName("Heart" + j);
+				deck.get(cardNumber).setNumber(j);
+				deck.get(cardNumber).setImage("Cards/heart" + j + ".png");
+				deck.get(cardNumber).view.fitWidthProperty().bind(pane.getRoot().widthProperty().
+						subtract(pane.getRightPane().getWidth()).divide(20));
+				deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
+						subtract(pane.getRightPane().getHeight()).divide(4.5));
+				deck.get(cardNumber).view.setOnMousePressed(e -> {
+					playerChoice.add(deck.get(cardNumber));
+					System.out.println(cardNumber);
+				});
 				break;
-				case 3: deck.get(j + 38).setName("Diamond" + j);
-				deck.get(j + 38).setNumber(j);
-				deck.get(j + 38).setImage("Cards/diamond" + j + ".png");
+				case 3: 
+				cardNumber = j + 38;
+				deck.get(cardNumber).setName("Diamond" + j);
+				deck.get(cardNumber).setNumber(j);
+				deck.get(cardNumber).setImage("Cards/diamond" + j + ".png");
+				deck.get(cardNumber).view.fitWidthProperty().bind(pane.getRoot().widthProperty().
+						subtract(pane.getRightPane().getWidth()).divide(20));
+				deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
+						subtract(pane.getRightPane().getHeight()).divide(4.5));
+				deck.get(cardNumber).view.setOnMousePressed(e -> {
+					playerChoice.add(deck.get(cardNumber));
+					System.out.println(cardNumber);
+				});
 				break;
 				}
 			}
 		}
+		
 		Group cards = new Group();
 		for (int i = 0; i < 52; i++) {
+			int cardIterator;
+			int multiplier;
 			if (i < 13) {
-				deck.get(i).view.setX(20 + (i * cardX));
+				cardIterator = i;
+				multiplier = 0;
+				cardSize(deck, cardIterator, i, multiplier, pane);
 			}
 			else if (12 < i && i < 26) {
-				deck.get(i).view.setX(0 + ((i - 13) * cardX));
-				deck.get(i).view.setY(cardY);
+				cardIterator = i - 13;
+				multiplier = 1;
+				cardSize(deck, cardIterator, i, multiplier, pane);
 			}
 			else if (25 < i && i < 39) {
-				deck.get(i).view.setX(20 + ((i - 26) * cardX));
-				deck.get(i).view.setY(cardY * 2);
+				cardIterator = i - 26;
+				multiplier = 2;
+				cardSize(deck, cardIterator, i, multiplier, pane);
 			}
 			else if (38 < i) {
-				deck.get(i).view.setX(0 + ((i - 39) * cardX));
-				deck.get(i).view.setY(cardY * 3);
+				cardIterator = i - 39;
+				multiplier = 3;
+				cardSize(deck, cardIterator, i, multiplier, pane);
 			}
 			cards.getChildren().add(deck.get(i).view);
 			System.out.println(deck.get(i).getName());
 		}
-		vBoxCards.getChildren().addAll(menuBar, cards);
+		vBoxCards.getChildren().addAll(cards);
+		
 		primaryStage.setTitle("Home Casino Main Menu");
 		primaryStage.setScene(menuScene);
 		primaryStage.show();
+	}
+	private void cardSize(List<GameCard> deck, int cardIterator, int i, int multiplier, PaneOrganizer pane) {
+		deck.get(cardIterator).view.xProperty().bind((pane.getRoot().widthProperty().
+				subtract(pane.getRightPane().getWidth()).divide(17).multiply(cardIterator)));
+		deck.get(cardIterator).view.yProperty().bind(pane.getRoot().heightProperty().
+				subtract(pane.getTopPane().getHeight()).divide(5).multiply(multiplier));
+		deck.get(cardIterator).view.setPreserveRatio(true);
+	}
+	private void playKeno() {
+		
 	}
 	public static void main(String[] args) {
 		launch (args);
@@ -139,14 +238,5 @@ public class GUI extends Application {
 		kenoStage.show();
 
 		menuItemExit1.setOnAction(e1 -> kenoStage.close());
-	}
-
-	public double getCardX() {
-		System.out.println(cardX);
-		return cardX;
-	}
-	public double getCardY() {
-		System.out.println(cardY);
-		return cardY;
 	}
 }
