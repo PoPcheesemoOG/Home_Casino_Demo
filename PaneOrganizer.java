@@ -45,7 +45,7 @@ public class PaneOrganizer {
 		
 		rightPane = new Pane();
 		rightPane.setStyle("-fx-background-color: red");
-		rightPane.setPrefSize(200, 600);
+		rightPane.setPrefSize(150, 600);
 		
 		centerPane.setStyle("-fx-background-color: crimson");
 		
