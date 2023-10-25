@@ -137,8 +137,8 @@ public class GUI extends Application {
 		correct = 0;
 		updateBank(bankTf, bank);
 	}
-	private void playPoker() {
-
+	private void playPoker(List<GameCard> playerChoice, List<GameCard> deck, double betSize, Text bankTf, Text display) {
+		
 	}
 
 	private void buttonSetup(Button bt, Color color) {
@@ -165,6 +165,10 @@ public class GUI extends Application {
 		bankTf = new Text("Money: " + df.format(bank));
 		bankTf.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 30.0));
 		betAmount.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 30.0));
+		
+		Text display;
+		display = new Text("Choose 10 cards, a bet and press play");
+		display.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 20.0));
 
 		VBox vBox1 = new VBox(20);
 		VBox vBox2 = new VBox(10);
@@ -181,12 +185,15 @@ public class GUI extends Application {
 		vBox1.setBackground(new Background(new BackgroundFill(Color.GOLD,
 				CornerRadii.EMPTY, Insets.EMPTY)));
 		vBox1.setAlignment(Pos.CENTER);
+		
+		Group cards = new Group();
+		List randoms = new ArrayList();
 
 		Button btPlayPoker = new Button("PLAY");
 		buttonSetup(btPlayPoker, Color.LIMEGREEN);
 		btPlayPoker.setOnAction(e -> {
 			System.out.println("BINGO");
-			playPoker();
+			playPoker(playerChoice, deck, betSize, bankTf, display);
 		});
 
 		Button btReset = new Button("RESET");
@@ -194,6 +201,18 @@ public class GUI extends Application {
 		btReset.setOnAction(e -> {
 			for (int i = 0; i < 52; i++) {
 				deck.get(i).view.setEffect(null);
+			}
+			for (int i = 0; i < 5; i++) {
+				int random = (int) ((Math.random() * 480) / 10);
+				
+				while (randoms.contains(random) == true) {
+					random = (int) ((Math.random() * 480) / 10);
+				}
+				randoms.add(random);
+				System.out.println(random);
+				deck.get(random).view.setX(150 * i);
+				deck.get(random).view.setY(30);
+				cards.getChildren().add(deck.get(random).view);
 			}
 
 		});
@@ -251,9 +270,9 @@ public class GUI extends Application {
 					deck.get(cardNumber).setNumber(j);
 					deck.get(cardNumber).setImage("Cards/spade" + j + ".png");
 					deck.get(cardNumber).view.fitWidthProperty().bind(pane.getRoot().widthProperty().
-							subtract(pane.getRightPane().getWidth()).divide(20));
+							subtract(pane.getRightPane().getWidth()).divide(8));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
-							subtract(pane.getRightPane().getHeight()).divide(6));
+							subtract(pane.getRightPane().getHeight()).divide(2.5));
 
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
@@ -268,9 +287,9 @@ public class GUI extends Application {
 					deck.get(cardNumber).setNumber(j);
 					deck.get(cardNumber).setImage("Cards/club" + j + ".png");
 					deck.get(cardNumber).view.fitWidthProperty().bind(pane.getAnchor().widthProperty().
-							subtract(pane.getRightPane().getWidth()).divide(20));
+							subtract(pane.getRightPane().getWidth()).divide(8));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getAnchor().heightProperty().
-							subtract(pane.getRightPane().getHeight()).divide(6));
+							subtract(pane.getRightPane().getHeight()).divide(2.5));
 
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
@@ -285,9 +304,9 @@ public class GUI extends Application {
 					deck.get(cardNumber).setNumber(j);
 					deck.get(cardNumber).setImage("Cards/heart" + j + ".png");
 					deck.get(cardNumber).view.fitWidthProperty().bind(pane.getRoot().widthProperty().
-							subtract(pane.getRightPane().getWidth()).divide(20));
+							subtract(pane.getRightPane().getWidth()).divide(8));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
-							subtract(pane.getRightPane().getHeight()).divide(6));
+							subtract(pane.getRightPane().getHeight()).divide(2.5));
 
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
@@ -302,9 +321,9 @@ public class GUI extends Application {
 					deck.get(cardNumber).setNumber(j);
 					deck.get(cardNumber).setImage("Cards/diamond" + j + ".png");
 					deck.get(cardNumber).view.fitWidthProperty().bind(pane.getRoot().widthProperty().
-							subtract(pane.getRightPane().getWidth()).divide(20));
+							subtract(pane.getRightPane().getWidth()).divide(8));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
-							subtract(pane.getRightPane().getHeight()).divide(6));
+							subtract(pane.getRightPane().getHeight()).divide(2.5));
 
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
@@ -316,26 +335,39 @@ public class GUI extends Application {
 				}
 			}
 		}
-		Group cards = new Group();
-		for (int i = 0; i < 52; i++) {
-			if (i < 13) {
-				deck.get(i).view.setX(20 + (i * cardX));
+		
+		for (int i = 0; i < 5; i++) {
+			int random = (int) ((Math.random() * 480) / 10);
+			
+			while (randoms.contains(random) == true) {
+				random = (int) ((Math.random() * 480) / 10);
 			}
-			else if (12 < i && i < 26) {
-				deck.get(i).view.setX(0 + ((i - 13) * cardX));
-				deck.get(i).view.setY(cardY);
-			}
-			else if (25 < i && i < 39) {
-				deck.get(i).view.setX(20 + ((i - 26) * cardX));
-				deck.get(i).view.setY(cardY * 2);
-			}
-			else if (38 < i) {
-				deck.get(i).view.setX(0 + ((i - 39) * cardX));
-				deck.get(i).view.setY(cardY * 3);
-			}
-			cards.getChildren().add(deck.get(i).view);
-			System.out.println(deck.get(i).getName());
+			randoms.add(random);
+			System.out.println(random);
+			deck.get(random).view.setX(150 * i);
+			deck.get(random).view.setY(30);
+			cards.getChildren().add(deck.get(random).view);
 		}
+		
+//		for (int i = 0; i < 52; i++) {
+//			if (i < 13) {
+//				deck.get(i).view.setX(20 + (i * cardX));
+//			}
+//			else if (12 < i && i < 26) {
+//				deck.get(i).view.setX(0 + ((i - 13) * cardX));
+//				deck.get(i).view.setY(cardY);
+//			}
+//			else if (25 < i && i < 39) {
+//				deck.get(i).view.setX(20 + ((i - 26) * cardX));
+//				deck.get(i).view.setY(cardY * 2);
+//			}
+//			else if (38 < i) {
+//				deck.get(i).view.setX(0 + ((i - 39) * cardX));
+//				deck.get(i).view.setY(cardY * 3);
+//			}
+//			cards.getChildren().add(deck.get(i).view);
+//			System.out.println(deck.get(i).getName());
+		
 		vBox1.getChildren().addAll(cards);
 
 		btPlayPoker.prefWidthProperty().bind(vBox2.widthProperty());
@@ -361,12 +393,15 @@ public class GUI extends Application {
 
 		Text bankTf;
 		Text betAmount;
-		Text display;
+		
 		betAmount = new Text("Bet Amount: " + df.format(betSize));
 		bankTf = new Text("Money: " + df.format(bank));
-		display = new Text("Choose 10 cards, a bet and press play");
+		
 		bankTf.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 26.0));
 		betAmount.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 26.0));
+		
+		Text display;
+		display = new Text("Choose 10 cards, a bet and press play");
 		display.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 20.0));
 
 		List<GameCard> deck = new ArrayList<GameCard>();
