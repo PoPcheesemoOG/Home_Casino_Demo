@@ -40,7 +40,7 @@ public class PaneOrganizer {
 		topPane = new Pane();
 		HBox hbox = new HBox(10);
 		topPane.getChildren().add(hbox);
-		topPane.setStyle("-fx-background-color: darkred");
+		topPane.setStyle("-fx-background-color: indianred");
 		topPane.setPrefSize(1200, 100);
 		
 		rightPane = new Pane();

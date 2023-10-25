@@ -104,7 +104,7 @@ public class GUI extends Application {
 		primaryStage.show();
 	}
 
-	private void playKeno(List<GameCard> playerChoice, List<GameCard> deck) {
+	private void playKeno(List<GameCard> playerChoice, List<GameCard> deck, double betSize, Text bankTf, Text display) {
 		ColorAdjust colorAdjust = new ColorAdjust();
 		colorAdjust.setContrast(0.0);
 		colorAdjust.setHue(-0.2);
@@ -122,6 +122,20 @@ public class GUI extends Application {
 			System.out.println(random);
 		}
 		System.out.println("Correct: " + correct);
+		switch (correct) {
+		case 0: bank += betSize * 0.0; display.setText("You win: " + df.format(betSize * 0.5) + "\nPlease press reset to play again"); break;
+		case 1: bank += betSize * 0.5; display.setText("You win: " + df.format(betSize * 0.5) + "\nPlease press reset to play again"); break;
+		case 2: bank += betSize * 1; display.setText("You win: " + df.format(betSize * 1) + "\nPlease press reset to play again"); break;
+		case 3: bank += betSize * 2; display.setText("You win: " + df.format(betSize * 2) + "\nPlease press reset to play again"); break;
+		case 4: bank += betSize * 3; display.setText("You win: " + df.format(betSize * 3) + "\nPlease press reset to play again"); break;
+		case 5: bank += betSize * 5; display.setText("You win: " + df.format(betSize * 5) + "\nPlease press reset to play again"); break;
+		case 6: bank += betSize * 8; display.setText("You win: " + df.format(betSize * 8) + "\nPlease press reset to play again"); break;
+		case 7: bank += betSize * 12; display.setText("You win: " + df.format(betSize * 12) + "\nPlease press reset to play again"); break;
+		case 8: bank += betSize * 20; display.setText("You win: " + df.format(betSize * 20) + "\nPlease press reset to play again"); break;
+		case 9: bank += betSize * 50; display.setText("You win: " + df.format(betSize * 50) + "\nPlease press reset to play again"); break;
+		}
+		correct = 0;
+		updateBank(bankTf, bank);
 	}
 	private void playPoker() {
 
@@ -129,7 +143,7 @@ public class GUI extends Application {
 
 	private void buttonSetup(Button bt, Color color) {
 		bt.setPrefSize(130, 50);
-		bt.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 16.0));
+		bt.setFont(new Font(14).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 14.0));
 		bt.setBackground(new Background(new BackgroundFill(color,
 				CornerRadii.EMPTY, Insets.EMPTY)));
 		bt.setMaxSize(130, 50);
@@ -347,17 +361,20 @@ public class GUI extends Application {
 
 		Text bankTf;
 		Text betAmount;
+		Text display;
 		betAmount = new Text("Bet Amount: " + df.format(betSize));
 		bankTf = new Text("Money: " + df.format(bank));
-		bankTf.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 30.0));
-		betAmount.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 30.0));
+		display = new Text("Choose 10 cards, a bet and press play");
+		bankTf.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 26.0));
+		betAmount.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 26.0));
+		display.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 20.0));
 
 		List<GameCard> deck = new ArrayList<GameCard>();
 		List<GameCard> playerChoice = new ArrayList<GameCard>();
 
 		VBox vBox1 = new VBox(20);
 		VBox vBox2 = new VBox(10);
-		HBox hBox1 = new HBox(50);
+		HBox hBox1 = new HBox(30);
 		hBox1.setPadding(new Insets(35));
 
 		vBox1.setBackground(new Background(new BackgroundFill(Color.GOLD,
@@ -368,9 +385,17 @@ public class GUI extends Application {
 		buttonSetup(btPlayKeno, Color.LIMEGREEN);
 		btPlayKeno.setOnAction(e -> {
 			System.out.println("BINGO");
+			if (playerChoice.size() < 10) {
+				display.setText("Please select 10 cards to play");
+				return;
+			}
+			if (betSize == 0) {
+				display.setText("Please choose a bet amount");
+				return;
+			}
 			bank -= betSize;
 			updateBank(bankTf, bank);
-			playKeno(playerChoice, deck);
+			playKeno(playerChoice, deck, betSize, bankTf, display);
 			betSize = 0;
 			updateBet(betAmount, betSize);
 		});
@@ -380,10 +405,12 @@ public class GUI extends Application {
 			for (int i = 0; i < 52; i++) {
 				deck.get(i).view.setEffect(null);
 			}
+			playerChoice.clear();
+			display.setText("Choose 10 cards, a bet and press play");
 
 		});
 
-		Button btBetUp = new Button("BET UP");
+		Button btBetUp = new Button("BET UP 10");
 		buttonSetup(btBetUp, Color.LAWNGREEN);
 		btBetUp.setOnAction(e -> {
 			if (betSize < bank) {
@@ -393,7 +420,7 @@ public class GUI extends Application {
 			System.out.println(betSize);
 			updateBet(betAmount, betSize);
 		});
-		Button btBetDown = new Button("BET DOWN");
+		Button btBetDown = new Button("BET DOWN 10");
 		buttonSetup(btBetDown, Color.PINK);
 		btBetDown.setOnAction(e -> {
 			if (betSize > 0) {
@@ -407,7 +434,7 @@ public class GUI extends Application {
 		vBox2.setPadding(new Insets(10));
 		vBox2.setAlignment(Pos.CENTER);
 		vBox2.getChildren().addAll(btPlayKeno, btReset, btBetUp, btBetDown);
-		hBox1.getChildren().addAll(bankTf, betAmount);
+		hBox1.getChildren().addAll(bankTf, betAmount, display);
 
 		PaneOrganizer pane = new PaneOrganizer(vBox1);
 		pane.getTopPane().getChildren().addAll(hBox1, menuBarKeno);
@@ -436,10 +463,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getHeight()).divide(6));
 
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
-						playerChoice.add(deck.get(cardNumber));
+						if (playerChoice.size() < 10) {
+							playerChoice.add(deck.get(cardNumber));
+							deck.get(cardNumber).view.setEffect(new Glow(0.8));
+						} else return;
+						
 						System.out.println(cardNumber);
-						deck.get(cardNumber).view.setEffect(new Glow(0.8));
-
 					});
 					break;
 				case 1: 
@@ -453,9 +482,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getHeight()).divide(6));
 
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
-						playerChoice.add(deck.get(cardNumber));
+						if (playerChoice.size() < 10) {
+							playerChoice.add(deck.get(cardNumber));
+							deck.get(cardNumber).view.setEffect(new Glow(0.8));
+						} else return;
+						
 						System.out.println(cardNumber);
-						deck.get(cardNumber).view.setEffect(new Glow(0.8));
 					});
 					break;
 				case 2: 
@@ -469,10 +501,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getHeight()).divide(6));
 
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
-						playerChoice.add(deck.get(cardNumber));
+						if (playerChoice.size() < 10) {
+							playerChoice.add(deck.get(cardNumber));
+							deck.get(cardNumber).view.setEffect(new Glow(0.8));
+						} else return;
+						
 						System.out.println(cardNumber);
-						deck.get(cardNumber).view.setEffect(new Glow(0.8));
-
 					});
 					break;
 				case 3: 
@@ -486,10 +520,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getHeight()).divide(6));
 
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
-						playerChoice.add(deck.get(cardNumber));
+						if (playerChoice.size() < 10) {
+							playerChoice.add(deck.get(cardNumber));
+							deck.get(cardNumber).view.setEffect(new Glow(0.8));
+						} else return;
+						
 						System.out.println(cardNumber);
-						deck.get(cardNumber).view.setEffect(new Glow(0.8));
-
 					});
 					break;
 				}
