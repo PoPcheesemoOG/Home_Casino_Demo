@@ -14,18 +14,8 @@ public class GameCard {
 	public enum Suit {Spade, Clubs, Heart, Diamond};
 	public int Number;
 	public String name;
-	DoubleProperty cardW = new SimpleDoubleProperty(GUI.cardX);
-	DoubleProperty cardH = new SimpleDoubleProperty(GUI.cardY);
-	
-//	DoubleBinding cardWbind = new DoubleBinding() {
-//		{ super.bind(cardW, GUI.cardX);
-//		}
-//
-//		@Override
-//		protected double computeValue() {
-//			// TODO Auto-generated method stub
-//			return 0;
-//		}};
+	double cardW = 1000 / 13.5;
+	double cardH = 500 / 5;
 
 	public GameCard() {
 
@@ -50,7 +40,7 @@ public class GameCard {
 		
 		img = new Image(new FileInputStream(location));
 		view = new ImageView(img);
-		view.setFitHeight(cardH.get() - 10);
-		view.setFitWidth(cardW.get() - 10);
+		view.setFitHeight(cardH - 10);
+		view.setFitWidth(cardW - 10);
 	}
 }
