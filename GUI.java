@@ -25,10 +25,10 @@ public class GUI extends Application {
 	@Override
 
 	public void start(Stage primaryStage) throws Exception {
-		VBox vBox1 = new VBox(20);
+		VBox vBox1 = new VBox();
 		vBox1.setBackground(new Background(new BackgroundFill(Color.DARKOLIVEGREEN,
 				CornerRadii.EMPTY, Insets.EMPTY)));
-		vBox1.setAlignment(Pos.CENTER);
+		vBox1.setAlignment(Pos.TOP_LEFT);
 
 		MenuBar menuBar = new MenuBar();		
 		Menu menuGames = new Menu("Games");		
