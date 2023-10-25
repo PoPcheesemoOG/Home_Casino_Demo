@@ -11,10 +11,12 @@ import javafx.scene.paint.*;
 import javafx.scene.text.*;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
+import javafx.scene.effect.*;
+import javafx.scene.*;
 import javafx.geometry.*;
 import javafx.stage.*;
 import javafx.application.*;
-import javafx.scene.*;
+
 
 public class GUI extends Application {
 	static double cardX;
@@ -74,6 +76,14 @@ public class GUI extends Application {
 	private void playPoker() {
 		
 	}
+	private void buttonSetup(Button bt, Color color) {
+		bt.setPrefSize(130, 50);
+		bt.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 16.0));
+		bt.setBackground(new Background(new BackgroundFill(color,
+				CornerRadii.EMPTY, Insets.EMPTY)));
+		bt.setMaxSize(130, 50);
+		bt.setMinSize(130, 50);
+	}
 	public static void main(String[] args) {
 		launch (args);
 	}
@@ -98,19 +108,36 @@ public class GUI extends Application {
 		vBox1.setAlignment(Pos.CENTER);
 		
 		Button btPlayPoker = new Button("PLAY");
-		btPlayPoker.setPrefSize(130, 50);
-		btPlayPoker.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 16.0));
-		btPlayPoker.setBackground(new Background(new BackgroundFill(Color.LIMEGREEN,
-				CornerRadii.EMPTY, Insets.EMPTY)));
-		btPlayPoker.setMaxSize(130, 50);
-		btPlayPoker.setMinSize(130, 50);
+		buttonSetup(btPlayPoker, Color.LIMEGREEN);
+		
+//		btPlayPoker.setPrefSize(130, 50);
+//		btPlayPoker.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 16.0));
+//		btPlayPoker.setBackground(new Background(new BackgroundFill(Color.LIMEGREEN,
+//				CornerRadii.EMPTY, Insets.EMPTY)));
+//		btPlayPoker.setMaxSize(130, 50);
+//		btPlayPoker.setMinSize(130, 50);
+		
 		btPlayPoker.setOnAction(e -> {
 			System.out.println("BINGO");
 			playPoker();
 		});
+		
+		Button btReset = new Button("RESET");
+		btReset.setPrefSize(130, 50);
+		btReset.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 16.0));
+		btReset.setBackground(new Background(new BackgroundFill(Color.DARKGOLDENROD,
+				CornerRadii.EMPTY, Insets.EMPTY)));
+		btReset.setMaxSize(130, 50);
+		btReset.setMinSize(130, 50);
+		btReset.setOnAction(e -> {
+			for (int i = 0; i < 52; i++) {
+				deck.get(i).view.setEffect(null);
+			}
+			
+		});
 		vBox2.setPadding(new Insets(10));
 		vBox2.setAlignment(Pos.CENTER);
-		vBox2.getChildren().add(btPlayPoker);
+		vBox2.getChildren().addAll(btPlayPoker, btReset);
 		
 		PaneOrganizer pane = new PaneOrganizer(vBox1);
 		pane.getTopPane().getChildren().add(menuBarPoker);
@@ -141,9 +168,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
+					
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
+						deck.get(cardNumber).view.setEffect(new Glow(0.8));
+					
 					});
 					break;
 				case 1: 
@@ -155,9 +185,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getAnchor().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
+					
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
+						deck.get(cardNumber).view.setEffect(new Glow(0.8));
+					
 					});
 					break;
 				case 2: 
@@ -169,9 +202,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
+					
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
+						deck.get(cardNumber).view.setEffect(new Glow(0.8));
+					
 					});
 					break;
 				case 3: 
@@ -183,9 +219,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
+					
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
+						deck.get(cardNumber).view.setEffect(new Glow(0.8));
+					
 					});
 					break;
 				}
@@ -225,6 +264,7 @@ public class GUI extends Application {
 
 		menuItemExit1.setOnAction(e1 -> pokerStage.close());
 	}
+	
 	private void newKeno() throws Exception {
 		
 		MenuBar menuBarKeno = new MenuBar();		
@@ -253,6 +293,7 @@ public class GUI extends Application {
 			System.out.println("BINGO");
 			playKeno();
 		});
+	
 		vBox2.setPadding(new Insets(10));
 		vBox2.setAlignment(Pos.CENTER);
 		vBox2.getChildren().add(btPlayKeno);
@@ -282,9 +323,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
+					
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
+						deck.get(cardNumber).view.setEffect(new Glow(0.8));
+					
 					});
 					break;
 				case 1: 
@@ -296,9 +340,11 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getAnchor().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
+					
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
+						deck.get(cardNumber).view.setEffect(new Glow(0.8));
 					});
 					break;
 				case 2: 
@@ -310,9 +356,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
+					
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
+						deck.get(cardNumber).view.setEffect(new Glow(0.8));
+					
 					});
 					break;
 				case 3: 
@@ -324,9 +373,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
+					
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
+						deck.get(cardNumber).view.setEffect(new Glow(0.8));
+					
 					});
 					break;
 				}
