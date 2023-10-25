@@ -2,10 +2,9 @@
  * Date: 10/17/2023
  */
 
+import java.text.*;
 import java.util.*;
-
 import javax.swing.text.View;
-
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.text.*;
@@ -23,14 +22,21 @@ public class GUI extends Application {
 	static double cardY;
 	static double sceneX;
 	static double sceneY;
+	static double bank;
+	static DecimalFormat df = new DecimalFormat("0.00");
+	double betSize;
+	Stage primaryStage;
 
 	@Override
 
 	public void start(Stage primaryStage) throws Exception {
-		VBox vBox1 = new VBox();
+		VBox vBox1 = new VBox(30);
 		vBox1.setBackground(new Background(new BackgroundFill(Color.DARKOLIVEGREEN,
 				CornerRadii.EMPTY, Insets.EMPTY)));
-		vBox1.setAlignment(Pos.TOP_LEFT);
+		vBox1.setAlignment(Pos.TOP_CENTER);
+
+		Text bankTf;
+		Text betAmount;
 
 		MenuBar menuBar = new MenuBar();		
 		Menu menuGames = new Menu("Games");		
@@ -58,8 +64,36 @@ public class GUI extends Application {
 		});
 		menuItemExit.setOnAction(e -> System.exit(0));
 
-		StackPane pane1 = new StackPane();
-		vBox1.getChildren().add(menuBar);
+		bank = 100;
+		betAmount = new Text("Bet Amount: " + df.format(betSize));
+		bankTf = new Text("Money: " + df.format(bank));
+		bankTf.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 30.0));
+		betAmount.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 30.0));
+
+		Button btPlayPoker = new Button("PLAY POKER");
+		Button btPlayKeno = new Button("PLAY KENO");
+		btPlayPoker.setLayoutX(600);
+		btPlayKeno.setAlignment(Pos.CENTER);
+		buttonSetup(btPlayPoker, Color.MEDIUMTURQUOISE);
+		buttonSetup(btPlayKeno, Color.PALEVIOLETRED);
+		btPlayPoker.setOnAction(e -> {
+			try {
+				newPoker();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		});
+		btPlayKeno.setOnAction(e -> {
+			try {
+				newKeno();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		});
+		Pane pane1 = new StackPane();
+		pane1.setBackground(new Background(new BackgroundFill(Color.DARKOLIVEGREEN,
+				CornerRadii.EMPTY, Insets.EMPTY)));
+		vBox1.getChildren().addAll(menuBar, btPlayPoker, btPlayKeno);
 		pane1.getChildren().addAll(vBox1);
 
 		Scene menuScene = new Scene(pane1, 600, 300);
@@ -70,12 +104,29 @@ public class GUI extends Application {
 		primaryStage.show();
 	}
 
-	private void playKeno() {
-	
+	private void playKeno(List<GameCard> playerChoice, List<GameCard> deck) {
+		ColorAdjust colorAdjust = new ColorAdjust();
+		colorAdjust.setContrast(0.0);
+		colorAdjust.setHue(-0.2);
+		colorAdjust.setBrightness(0.5);
+		colorAdjust.setSaturation(0.8);
+		int random;
+		int correct = 0;
+		for (int i = 0; i < 10; i++) {
+			random = (int) (Math.random() * 520) / 10;
+			deck.get(random).view.setEffect(colorAdjust);
+			if (playerChoice.contains(deck.get(random)) == true) {
+				correct++;
+			}
+
+			System.out.println(random);
+		}
+		System.out.println("Correct: " + correct);
 	}
 	private void playPoker() {
-		
+
 	}
+
 	private void buttonSetup(Button bt, Color color) {
 		bt.setPrefSize(130, 50);
 		bt.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 16.0));
@@ -94,64 +145,85 @@ public class GUI extends Application {
 		menuBarPoker.getMenus().add(menuExit1);
 		menuExit1.getItems().add(menuItemExit1);
 
+		Text bankTf;
+		Text betAmount;
+		betAmount = new Text("Bet Amount: " + df.format(betSize));
+		bankTf = new Text("Money: " + df.format(bank));
+		bankTf.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 30.0));
+		betAmount.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 30.0));
+
 		VBox vBox1 = new VBox(20);
 		VBox vBox2 = new VBox(10);
+		HBox hBox1 = new HBox(50);
+		hBox1.setPadding(new Insets(35));
+
 		vBox1.setBackground(new Background(new BackgroundFill(Color.DARKOLIVEGREEN,
 				CornerRadii.EMPTY, Insets.EMPTY)));
 		vBox1.getChildren().addAll(menuBarPoker);
-		
+
 		List<GameCard> deck = new ArrayList<GameCard>();
 		List<GameCard> playerChoice = new ArrayList<GameCard>();
 
 		vBox1.setBackground(new Background(new BackgroundFill(Color.GOLD,
 				CornerRadii.EMPTY, Insets.EMPTY)));
 		vBox1.setAlignment(Pos.CENTER);
-		
+
 		Button btPlayPoker = new Button("PLAY");
 		buttonSetup(btPlayPoker, Color.LIMEGREEN);
-		
-//		btPlayPoker.setPrefSize(130, 50);
-//		btPlayPoker.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 16.0));
-//		btPlayPoker.setBackground(new Background(new BackgroundFill(Color.LIMEGREEN,
-//				CornerRadii.EMPTY, Insets.EMPTY)));
-//		btPlayPoker.setMaxSize(130, 50);
-//		btPlayPoker.setMinSize(130, 50);
-		
 		btPlayPoker.setOnAction(e -> {
 			System.out.println("BINGO");
 			playPoker();
 		});
-		
+
 		Button btReset = new Button("RESET");
-		btReset.setPrefSize(130, 50);
-		btReset.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 16.0));
-		btReset.setBackground(new Background(new BackgroundFill(Color.DARKGOLDENROD,
-				CornerRadii.EMPTY, Insets.EMPTY)));
-		btReset.setMaxSize(130, 50);
-		btReset.setMinSize(130, 50);
+		buttonSetup(btReset, Color.DARKGOLDENROD);
 		btReset.setOnAction(e -> {
 			for (int i = 0; i < 52; i++) {
 				deck.get(i).view.setEffect(null);
 			}
-			
+
 		});
+
+		Button btBetUp = new Button("BET UP");
+		buttonSetup(btBetUp, Color.LAWNGREEN);
+		btBetUp.setOnAction(e -> {
+			if (betSize < bank) {
+				betSize += 10;
+			}
+			else return;
+			System.out.println(betSize);
+			updateBet(betAmount, betSize);
+		});
+		Button btBetDown = new Button("BET DOWN");
+		buttonSetup(btBetDown, Color.PINK);
+		btBetDown.setOnAction(e -> {
+			if (betSize > 0) {
+				betSize -= 10;
+			}
+			else return;
+			System.out.println(betSize);
+			updateBet(betAmount, betSize);
+		});
+
+
 		vBox2.setPadding(new Insets(10));
 		vBox2.setAlignment(Pos.CENTER);
-		vBox2.getChildren().addAll(btPlayPoker, btReset);
-		
+		vBox2.getChildren().addAll(btPlayPoker, btReset, btBetUp, btBetDown);
+		hBox1.getChildren().addAll(bankTf, betAmount);
+
 		PaneOrganizer pane = new PaneOrganizer(vBox1);
-		pane.getTopPane().getChildren().add(menuBarPoker);
+		pane.getTopPane().getChildren().addAll(hBox1, menuBarPoker);
 		pane.getRightPane().getChildren().add(vBox2);
-		
+
 		pane.getTopPane().setStyle("-fx-background-color: coral");
 		pane.getCenterPane().setStyle("-fx-background-color: darkolivegreen");
 		pane.getRightPane().setStyle("-fx-background-color: chocolate");
-		
+
 		double vBoxW = (pane.getAnchor().getWidth() - pane.getRightPane().getPrefWidth());
 		double vBoxH = (pane.getAnchor().getHeight() - pane.getTopPane().getPrefHeight());
 		cardX = 1000 / 17;
 		cardY = 400 / 4;
-		
+
 		for (int i = 0; i < 52; i++) {
 			deck.add(new GameCard());
 		}
@@ -168,12 +240,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
-					
+
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
 						deck.get(cardNumber).view.setEffect(new Glow(0.8));
-					
+
 					});
 					break;
 				case 1: 
@@ -185,12 +257,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getAnchor().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
-					
+
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
 						deck.get(cardNumber).view.setEffect(new Glow(0.8));
-					
+
 					});
 					break;
 				case 2: 
@@ -202,12 +274,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
-					
+
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
 						deck.get(cardNumber).view.setEffect(new Glow(0.8));
-					
+
 					});
 					break;
 				case 3: 
@@ -219,12 +291,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
-					
+
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
 						deck.get(cardNumber).view.setEffect(new Glow(0.8));
-					
+
 					});
 					break;
 				}
@@ -251,7 +323,7 @@ public class GUI extends Application {
 			System.out.println(deck.get(i).getName());
 		}
 		vBox1.getChildren().addAll(cards);
-		
+
 		btPlayPoker.prefWidthProperty().bind(vBox2.widthProperty());
 		btPlayPoker.prefHeightProperty().bind(vBox2.heightProperty());
 
@@ -264,49 +336,88 @@ public class GUI extends Application {
 
 		menuItemExit1.setOnAction(e1 -> pokerStage.close());
 	}
-	
+
 	private void newKeno() throws Exception {
-		
+
 		MenuBar menuBarKeno = new MenuBar();		
 		Menu menuExit1 = new Menu("Exit");
 		MenuItem menuItemExit1 = new MenuItem("Exit");
 		menuBarKeno.getMenus().add(menuExit1);
 		menuExit1.getItems().add(menuItemExit1);
 
+		Text bankTf;
+		Text betAmount;
+		betAmount = new Text("Bet Amount: " + df.format(betSize));
+		bankTf = new Text("Money: " + df.format(bank));
+		bankTf.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 30.0));
+		betAmount.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 30.0));
+
 		List<GameCard> deck = new ArrayList<GameCard>();
 		List<GameCard> playerChoice = new ArrayList<GameCard>();
-		
+
 		VBox vBox1 = new VBox(20);
 		VBox vBox2 = new VBox(10);
+		HBox hBox1 = new HBox(50);
+		hBox1.setPadding(new Insets(35));
+
 		vBox1.setBackground(new Background(new BackgroundFill(Color.GOLD,
 				CornerRadii.EMPTY, Insets.EMPTY)));
 		vBox1.setAlignment(Pos.CENTER);
-		
+
 		Button btPlayKeno = new Button("PLAY");
-		btPlayKeno.setPrefSize(130, 50);
-		btPlayKeno.setFont(new Font(16).font("Tahoma", FontWeight.BOLD, FontPosture.REGULAR, 16.0));
-		btPlayKeno.setBackground(new Background(new BackgroundFill(Color.LIMEGREEN,
-				CornerRadii.EMPTY, Insets.EMPTY)));
-		btPlayKeno.setMaxSize(130, 50);
-		btPlayKeno.setMinSize(130, 50);
+		buttonSetup(btPlayKeno, Color.LIMEGREEN);
 		btPlayKeno.setOnAction(e -> {
 			System.out.println("BINGO");
-			playKeno();
+			bank -= betSize;
+			updateBank(bankTf, bank);
+			playKeno(playerChoice, deck);
+			betSize = 0;
+			updateBet(betAmount, betSize);
 		});
-	
+		Button btReset = new Button("RESET");
+		buttonSetup(btReset, Color.DARKGOLDENROD);
+		btReset.setOnAction(e -> {
+			for (int i = 0; i < 52; i++) {
+				deck.get(i).view.setEffect(null);
+			}
+
+		});
+
+		Button btBetUp = new Button("BET UP");
+		buttonSetup(btBetUp, Color.LAWNGREEN);
+		btBetUp.setOnAction(e -> {
+			if (betSize < bank) {
+				betSize += 10;
+			}
+			else return;
+			System.out.println(betSize);
+			updateBet(betAmount, betSize);
+		});
+		Button btBetDown = new Button("BET DOWN");
+		buttonSetup(btBetDown, Color.PINK);
+		btBetDown.setOnAction(e -> {
+			if (betSize > 0) {
+				betSize -= 10;
+			}
+			else return;
+			System.out.println(betSize);
+			updateBet(betAmount, betSize);
+		});
+
 		vBox2.setPadding(new Insets(10));
 		vBox2.setAlignment(Pos.CENTER);
-		vBox2.getChildren().add(btPlayKeno);
-		
+		vBox2.getChildren().addAll(btPlayKeno, btReset, btBetUp, btBetDown);
+		hBox1.getChildren().addAll(bankTf, betAmount);
+
 		PaneOrganizer pane = new PaneOrganizer(vBox1);
-		pane.getTopPane().getChildren().add(menuBarKeno);
+		pane.getTopPane().getChildren().addAll(hBox1, menuBarKeno);
 		pane.getRightPane().getChildren().add(vBox2);
-		
+
 		double vBoxW = (pane.getAnchor().getWidth() - pane.getRightPane().getPrefWidth());
 		double vBoxH = (pane.getAnchor().getHeight() - pane.getTopPane().getPrefHeight());
 		cardX = 1000 / 17;
 		cardY = 400 / 4;
-		
+
 		for (int i = 0; i < 52; i++) {
 			deck.add(new GameCard());
 		}
@@ -323,12 +434,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
-					
+
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
 						deck.get(cardNumber).view.setEffect(new Glow(0.8));
-					
+
 					});
 					break;
 				case 1: 
@@ -340,7 +451,7 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getAnchor().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
-					
+
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
@@ -356,12 +467,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
-					
+
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
 						deck.get(cardNumber).view.setEffect(new Glow(0.8));
-					
+
 					});
 					break;
 				case 3: 
@@ -373,12 +484,12 @@ public class GUI extends Application {
 							subtract(pane.getRightPane().getWidth()).divide(20));
 					deck.get(cardNumber).view.fitHeightProperty().bind(pane.getRoot().heightProperty().
 							subtract(pane.getRightPane().getHeight()).divide(6));
-					
+
 					deck.get(cardNumber).view.setOnMousePressed(e -> {
 						playerChoice.add(deck.get(cardNumber));
 						System.out.println(cardNumber);
 						deck.get(cardNumber).view.setEffect(new Glow(0.8));
-					
+
 					});
 					break;
 				}
@@ -405,7 +516,7 @@ public class GUI extends Application {
 			System.out.println(deck.get(i).getName());
 		}
 		vBox1.getChildren().addAll(cards);
-		
+
 		btPlayKeno.prefWidthProperty().bind(vBox2.widthProperty());
 		btPlayKeno.prefHeightProperty().bind(vBox2.heightProperty());
 
@@ -416,6 +527,14 @@ public class GUI extends Application {
 		kenoStage.setScene(kenoScene);
 		kenoStage.show();
 
-		menuItemExit1.setOnAction(e1 -> kenoStage.close());
+		menuItemExit1.setOnAction(e1 -> {
+			kenoStage.close();
+		});
+	}
+	private void updateBet(Text betAmount, double bet) {
+		betAmount.setText("Bet Amount: " + df.format(betSize));
+	}
+	private void updateBank(Text bankTf, double bank) {
+		bankTf.setText("Money: " + df.format(bank));
 	}
 }
